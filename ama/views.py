@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect
+
 from .models import *
 from .forms import *
+from . import utils
 
 # Create your views here.
 def ama_index(request):
@@ -20,7 +22,7 @@ def ama_post(request, ama_id):
 
 class CommentCreate(CreateView):
     model = Comment
-    fields = ['name', 'content']
+    fields = ['content']
     template_name = 'ama/comment_add.html'
 
     def get_success_url(self):
@@ -34,8 +36,10 @@ class CommentCreate(CreateView):
         parent_id = self.kwargs.get('cmt_id', None)
         if parent_id is not None:
             parent = get_object_or_404(Comment, pk=parent_id)
-        name = form.cleaned_data['name']
+
+        name = utils.get_random_name()
         content = form.cleaned_data['content']
+
         self.object = Comment(name=name, content=content, post_id=post_id)
         self.object.insert_at(parent, save=True)
         return HttpResponseRedirect(self.get_success_url())
