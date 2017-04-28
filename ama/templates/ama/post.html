@@ -1,0 +1,37 @@
+{% extends "ama/base.html" %}
+
+{% block content %}
+{% load bootstrap3 %}
+<div class="row">
+  <div class="col-xs-12">
+    <div class="ama-post">
+      {{ post.html | safe }}
+      <div class="reply">
+        <a href="{% url 'ama_comment_add' post.id %}">reply</a>
+      </div>
+    </div>
+    <div class="ama-comments">
+      <h3>Comments:</h3>
+      {% load mptt_tags %}
+      <ul class="cmt-parent">
+        {% recursetree nodes %}
+        <li class="cmt-children">
+          <p>
+            <a href="#">{% bootstrap_icon icon="circle-arrow-up" extra_classes="updoot" %} </a>
+            {{ node.name }} [FLAIR] {{ node.votes }} points</p>
+          <p> {{ node.content }}</p>
+          <div class="reply">
+            <a href="{% url 'ama_comment_add' post.id node.id %}">reply</a>
+          </div>
+          {% if not node.is_leaf_node %}
+          <ul class="cmt-list">
+            {{ children }}
+          </ul>
+          {% endif %}
+        </li>
+        {% endrecursetree %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

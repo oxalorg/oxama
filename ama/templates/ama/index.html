@@ -1,0 +1,19 @@
+{% extends "ama/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xs-12">
+    <h2>Archived AMAs</h2>
+    <ul class="ama-list">
+      {% for post in posts %}
+      <li class="ama-list-item">
+        <p class="ama-list-item-title"><a href="{% url 'ama_post' post.id %}">{{ post.title }}</a></p>
+        <p class="ama-list-item-meta">{{ post.votes }} points 
+          | {{ post.comment_set.count }} comments
+        </p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

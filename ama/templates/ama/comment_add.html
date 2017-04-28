@@ -1,0 +1,17 @@
+{% extends "ama/base.html" %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+<form action="" method="POST" class="form">
+  <h2>Add a comment</h2>
+  {% csrf_token %{% bootstrap_icon "star" %}
+  {% bootstrap_form form %}
+  {% buttons %}
+  <button type="submit" class="btn btn-primary">
+    {% bootstrap_icon "star" %} Submit
+  </button>
+  {% endbuttons %}
+</form>
+
+{% endblock %}
