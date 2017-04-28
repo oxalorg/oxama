@@ -37,10 +37,15 @@ class CommentCreate(CreateView):
         if parent_id is not None:
             parent = get_object_or_404(Comment, pk=parent_id)
 
-        name = utils.get_random_name()
+        if self.request.user.is_authenticated:
+            name = self.request.user.username
+            author = self.request.user
+        else:
+            name = utils.get_random_name()
+            author = None
         content = form.cleaned_data['content']
 
-        self.object = Comment(name=name, content=content, post_id=post_id)
+        self.object = Comment(name=name, content=content, post_id=post_id, author=author)
         self.object.insert_at(parent, save=True)
         return HttpResponseRedirect(self.get_success_url())
 

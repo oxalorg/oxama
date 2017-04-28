@@ -4,6 +4,9 @@
 {% load bootstrap3 %}
 <div class="row">
   <div class="col-xs-12">
+    <div class="ama-title">
+      <h2>{{ post.title }} <small>by {{ post.host }}</small></h2>
+    </div>
     <div class="ama-post">
       {{ post.html | safe }}
       <div class="reply">
@@ -18,7 +21,13 @@
         <li class="cmt-children">
           <p>
             <a href="#">{% bootstrap_icon icon="circle-arrow-up" extra_classes="updoot" %} </a>
-            {{ node.name }} [FLAIR] {{ node.votes }} points</p>
+            {% if node.author %}
+              <span class="ama-host">{{ node.author.username }}</span> 
+              <span class="ama-flair">ama guest</span>
+            {% else %}
+              {{ node.name }}
+            {% endif %}
+            {{ node.votes }} points</p>
           <p> {{ node.content }}</p>
           <div class="reply">
             <a href="{% url 'ama_comment_add' post.id node.id %}">reply</a>

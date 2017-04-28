@@ -2,6 +2,11 @@ import os
 import random
 
 from django.conf import settings
+import markdown2
+
+
+markdowner = markdown2.Markdown()
+markdown = markdowner.convert
 
 
 random_name_file = 'endangered-animalia.txt'
