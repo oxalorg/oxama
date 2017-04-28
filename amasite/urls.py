@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import RedirectView
+
+admin.site.site_header = 'Tiny QnA Administration'
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(pattern_name='ama_index')),
     url(r'^ama/', include('ama.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
 ]
