@@ -51,6 +51,10 @@
     font-weight: 700;
 }
 
+.ama-user {
+    color: teal;
+}
+
 .ama-flair {
     background-color: #cecece;
     color: forestgreen;

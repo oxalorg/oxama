@@ -22,8 +22,12 @@
           <p>
             <a href="#">{% bootstrap_icon icon="circle-arrow-up" extra_classes="updoot" %} </a>
             {% if node.author %}
-              <span class="ama-host">{{ node.author.username }}</span> 
-              <span class="ama-flair">ama guest</span>
+              {% if node.author == post.host %}
+                <span class="ama-host">{{ node.author.username }}</span> 
+                <span class="ama-flair">ama guest</span>
+              {% else %}
+                <span class="ama-user">{{ node.author.username }}</span> 
+              {% endif %}
             {% else %}
               {{ node.name }}
             {% endif %}
