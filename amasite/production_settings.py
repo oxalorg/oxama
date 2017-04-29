@@ -9,3 +9,4 @@ DEBUG = False
 
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
 
+ADMINS = os.environ['ADMINS'].split(',')
