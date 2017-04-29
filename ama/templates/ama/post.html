@@ -1,4 +1,19 @@
 {% extends "ama/base.html" %}
+{% block js %}
+<script>
+  function upvote(e, el) {
+    console.log(el);
+    $.ajax({
+      url: el.href,
+      data: {comment_id: el.id},
+      success: function () {
+        alert('Done')
+      },
+    })
+    return false
+  }
+</script>
+{% endblock %}
 
 {% block content %}
 {% load bootstrap3 %}
@@ -20,7 +35,7 @@
         {% recursetree nodes %}
         <li class="cmt-children">
           <p>
-            <a href="#">{% bootstrap_icon icon="circle-arrow-up" extra_classes="updoot" %} </a>
+            <a id="{{ node.id }}" onclick="return upvote(event, this);" href="{% url 'like_comment' %}">{% bootstrap_icon icon="circle-arrow-up" extra_classes="updoot" %} </a>
             {% if node.author %}
               {% if node.author == post.host %}
                 <span class="ama-host">{{ node.author.username }}</span> 
@@ -47,4 +62,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}

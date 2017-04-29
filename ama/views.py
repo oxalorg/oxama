@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views.generic.edit import CreateView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.db.models import F
 
 from .models import *
 from .forms import *
@@ -18,6 +19,21 @@ def ama_post(request, ama_id):
     comments = Comment.objects.filter(post=post)
     context = {'post': post, 'nodes': comments}
     return render(request, 'ama/post.html', context)
+
+
+def like_comment(request):
+    if request.method == 'POST':
+        return JsonResponse(status=400)
+    try:
+        comment_id = request.GET['comment_id']
+    except LookupError:
+        return JsonResponse(status=404)
+
+    comment = Comment.objects.get(pk=comment_id)
+    comment.votes = F('votes') + 1
+    comment.save()
+
+    return JsonResponse({'status': 'Success!'})
 
 
 class CommentCreate(CreateView):
