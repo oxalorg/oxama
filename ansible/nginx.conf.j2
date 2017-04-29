@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    server_name ama.oxal.org;
+
+    location / {
+        include proxy_params;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # enable this if and only if you use HTTPS
+        # proxy_set_header X-Forwarded-Proto https;
+        # proxy_set_header Host $http_host;
+        # we don't want nginx trying to do something clever with
+        # redirects, we set the Host: header above already.
+        proxy_redirect off;
+        proxy_pass http://{{ gunicorn_vars.bind_addr }};
+    }
+
+    location /static {
+        try_files $uri $uri/ =404;
+        alias {{ static_dir }};
+    }
+}

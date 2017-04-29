@@ -1,0 +1,79 @@
+---
+- hosts: do
+  become: true
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Clone/pull project repo
+      git: repo={{ repo_url }} dest={{ root_dir }} accept_hostkey=yes
+      notify: app restart
+
+    - name: update environment file
+      template:
+        src: env.conf.j2
+        dest: "{{ root_dir }}/env.conf"
+      notify: 
+        - app daemon reload
+        - app restart
+
+    - name: Make directory tree readable
+      file:
+        path: "{{ root_dir }}"
+        mode: u=rwX,g=rX,o=rX
+        recurse: yes
+        owner: "{{ user_acc }}"
+        group: www-data
+
+    - name: Update app service file
+      template:
+        src: gunicorn.service.j2
+        dest: /etc/systemd/system/{{ project_name }}.service
+      notify: app restart
+
+    - name: update python packages
+      pip:
+        requirements: "{{ root_dir }}/requirements.txt"
+        virtualenv: "{{ virtualenv_root }}"
+        virtualenv_python: python3
+      notify: app restart
+
+    - name: Update nginx config
+      template: 
+        src: nginx.conf.j2
+        dest: /etc/nginx/sites-available/{{ project_name }}.conf
+
+    - name: Symlink nginx conf
+      file: 
+        src: /etc/nginx/sites-available/{{ project_name }}.conf
+        dest: /etc/nginx/sites-enabled/{{ project_name }}.conf
+        state: link
+      notify: nginx restart
+
+    - name: make sure nginx server is running
+      service: name=nginx state=started enabled=yes
+
+    - name: make sure app server is running
+      systemd: name={{ project_name }} state=started enabled=yes
+
+    - name: migrate django
+      django_manage:
+        command: migrate
+        app_path: "{{ root_dir }}"
+        virtualenv: "{{ virtualenv_root }}"
+
+    - name: collectstatic django
+      django_manage:
+        command: collectstatic
+        app_path: "{{ root_dir }}"
+        virtualenv: "{{ virtualenv_root }}"
+
+  handlers:
+    - name: nginx restart
+      service: name=nginx state=restarted
+
+    - name: app daemon reload
+      systemd: name={{ project_name }} daemon_reload=yes
+
+    - name: app restart
+      systemd: name={{ project_name }} state=restarted

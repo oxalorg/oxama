@@ -1,0 +1,18 @@
+---
+- hosts: do
+  become: true
+
+  tasks:
+    - name: Install packages
+      apt: name={{ item }} update-cache=yes
+      with_items:
+        - nginx
+        - python3-pip
+
+    - name: Install virtualenv
+      pip: name=virtualenv
+
+    - name: Remove default nginx template
+      file: path=/etc/nginx/sites-enabled/default state=absent
+
+- include: deploy.yml

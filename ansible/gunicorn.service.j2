@@ -1,0 +1,18 @@
+[Unit]
+Description=Gunicorn instance to serve {{ project_name }}
+After=network.target
+
+[Service]
+User={{ user_acc }}
+Group=www-data
+WorkingDirectory={{ root_dir }}
+Environment="PATH={{ virtualenv_root }}/bin"
+EnvironmentFile={{ root_dir }}/env.conf
+ExecStart={{ virtualenv_root }}/bin/gunicorn --workers 3 -m 007 --bind {{ gunicorn_vars.bind_addr }} \
+        {% for key, value in app_env_vars.iteritems() %}
+            -e {{ key }}="{{ value }}" \
+        {% endfor %}
+            {{ app_name }}.wsgi
+
+[Install]
+WantedBy=multi-user.target
