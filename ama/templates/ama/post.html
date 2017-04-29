@@ -2,12 +2,11 @@
 {% block js %}
 <script>
   function upvote(e, el) {
-    console.log(el);
     $.ajax({
       url: el.href,
       data: {comment_id: el.id},
       success: function () {
-        alert('Done')
+        console.log('updoot!')
       },
     })
     return false

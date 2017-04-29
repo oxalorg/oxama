@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect, JsonResponse
+from django.db import transaction
 from django.db.models import F
 
 from .models import *
@@ -29,9 +30,13 @@ def like_comment(request):
     except LookupError:
         return JsonResponse(status=404)
 
-    comment = Comment.objects.get(pk=comment_id)
-    comment.votes = F('votes') + 1
-    comment.save()
+    with transaction.atomic():
+        with Comment.objects.disable_mptt_updates():
+            comment = Comment.objects.get(pk=comment_id)
+            comment.votes = F('votes') + 1
+            comment.save()
+    # TODO: expensive much?
+    Comment.objects.rebuild()
 
     return JsonResponse({'status': 'Success!'})
 
