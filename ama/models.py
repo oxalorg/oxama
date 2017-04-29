@@ -35,7 +35,7 @@ class Comment(MPTTModel):
     updated_at = models.DateTimeField(auto_now=True)
 
     class MPTTMeta:
-        order_insertion_by = ['votes']
+        order_insertion_by = ['-votes']
 
     def __str__(self):
         return "Comment " + str(self.id)
