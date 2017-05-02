@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'mptt',
     'debug_toolbar',
+    'template_timings_panel',
+    'debug_panel',
 
     'ama.apps.AmaConfig',
     'accounts.apps.AccountsConfig',
@@ -55,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_panel.middleware.DebugPanelMiddleware',
 ]
 
 ROOT_URLCONF = 'amasite.urls'
@@ -134,6 +136,12 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Debug toolbar
+from debug_toolbar import settings as debug_settings
+DEBUG_TOOLBAR_PANELS = debug_settings.PANELS_DEFAULTS + [
+    # Does not work with Debug Panel
+    # 'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+]
+
 INTERNAL_IPS = (
     '127.0.0.1',
 )
