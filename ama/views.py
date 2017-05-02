@@ -7,10 +7,12 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.db import transaction
 from django.db.models import F, Count
 from django.utils import timezone
+from ratelimit.decorators import ratelimit
 
 from .models import *
 from .forms import *
 from . import utils
+
 
 # Create your views here.
 def ama_index(request):
@@ -29,9 +31,17 @@ def ama_post(request, slug):
         return render(request, 'ama/post_landing.html', {'post': post})
 
 
+@ratelimit(key='ip', rate='10/m')
+@ratelimit(key='ip', rate='40/h')
 def like_comment(request):
-    if request.method == 'POST':
+    if getattr(request, 'limited', False):
+        # if the request was limited act as if everything
+        # went smoothly ¯\_(ツ)_/¯
+        pass
+        # return JsonResponse({'status': 'KIK!'})
+    elif request.method == 'POST':
         return JsonResponse(status=400)
+
     try:
         comment_id = request.GET['comment_id']
     except LookupError:
@@ -42,11 +52,11 @@ def like_comment(request):
             comment = Comment.objects.get(pk=comment_id)
             comment.votes = F('votes') + 1
             comment.save()
-    # TODO: expensive much?
-    Comment.objects.rebuild()
+    # TODO: still expensive, but much better
+    if Comment.objects.get(pk=comment_id).votes % 4 == 0:
+        Comment.objects.rebuild()
 
     return JsonResponse({'status': 'Success!'})
-
 
 class CommentCreate(CreateView):
     model = Comment
