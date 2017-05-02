@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F, Count
 
 from .models import *
 from .forms import *
@@ -10,7 +10,7 @@ from . import utils
 
 # Create your views here.
 def ama_index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.annotate(Count('comment')).all()
     context = {'posts': posts}
     return render(request, 'ama/index.html', context)
 

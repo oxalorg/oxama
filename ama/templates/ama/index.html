@@ -9,7 +9,7 @@
       <li class="ama-list-item">
         <p class="ama-list-item-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
         <p class="ama-list-item-meta">{{ post.votes }} points 
-          | {{ post.comment_set.count }} comments
+          | {{ post.comment__count }} comments
         </p>
       </li>
       {% endfor %}
