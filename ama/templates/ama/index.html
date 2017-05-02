@@ -7,7 +7,7 @@
     <ul class="ama-list">
       {% for post in posts %}
       <li class="ama-list-item">
-        <p class="ama-list-item-title"><a href="{% url 'ama_post' post.id %}">{{ post.title }}</a></p>
+        <p class="ama-list-item-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
         <p class="ama-list-item-meta">{{ post.votes }} points 
           | {{ post.comment_set.count }} comments
         </p>

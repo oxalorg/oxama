@@ -15,8 +15,8 @@ def ama_index(request):
     return render(request, 'ama/index.html', context)
 
 
-def ama_post(request, ama_id):
-    post = get_object_or_404(Post, pk=ama_id)
+def ama_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
     comments = Comment.objects.filter(post=post)
     context = {'post': post, 'nodes': comments}
     return render(request, 'ama/post.html', context)
