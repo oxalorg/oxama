@@ -1,0 +1,12 @@
+{% extends "ama/base.html" %}
+{% block content %}
+{% load bootstrap3 %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h2> AMA by {{ post.host.username }} will start on: {{ post.starts_at }}</h2>
+            {% if post.landing_summary %}
+                <p>{{ post.landing_summary }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

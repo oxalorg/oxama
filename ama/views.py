@@ -1,8 +1,12 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404, reverse
+from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
 from django.http import HttpResponseRedirect, JsonResponse
 from django.db import transaction
 from django.db.models import F, Count
+from django.utils import timezone
 
 from .models import *
 from .forms import *
@@ -10,16 +14,19 @@ from . import utils
 
 # Create your views here.
 def ama_index(request):
-    posts = Post.objects.annotate(Count('comment')).all()
+    posts = Post.objects.annotate(Count('comment')).filter(expires_at__lt=datetime.now())
     context = {'posts': posts}
     return render(request, 'ama/index.html', context)
 
 
 def ama_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    comments = Comment.objects.filter(post=post)
-    context = {'post': post, 'nodes': comments}
-    return render(request, 'ama/post.html', context)
+    if post.starts_at < timezone.now():
+        comments = Comment.objects.filter(post=post)
+        context = {'post': post, 'nodes': comments}
+        return render(request, 'ama/post.html', context)
+    else:
+        return render(request, 'ama/post_landing.html', {'post': post})
 
 
 def like_comment(request):

@@ -13,6 +13,10 @@ class Post(models.Model):
     votes = models.IntegerField(default=1)
     host = models.ForeignKey(settings.AUTH_USER_MODEL)
     slug = models.SlugField(max_length=400, unique=True)
+    landing_summary = models.TextField(blank=True, null=True)
+
+    starts_at = models.DateTimeField()
+    expires_at = models.DateTimeField(default=utils.get_expiry_delta)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
