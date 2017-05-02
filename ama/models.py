@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
 from . import utils
@@ -11,13 +12,22 @@ class Post(models.Model):
     content = models.TextField()
     votes = models.IntegerField(default=1)
     host = models.ForeignKey(settings.AUTH_USER_MODEL)
+    slug = models.SlugField(max_length=400, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = utils.get_random_slug()
+        super().save(*args, **kwargs)
+
     @property
     def html(self):
         return utils.markdown(self.content)
+
+    def get_absolute_url(self):
+        return reverse('ama_post', args=(self.slug,))
 
     def __str__(self):
         return self.title
