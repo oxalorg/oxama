@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'template_timings_panel',
     'debug_panel',
+    'captcha',
 
     'ama.apps.AmaConfig',
     'accounts.apps.AccountsConfig',

@@ -25,7 +25,9 @@ urlpatterns = [
     url(r'^ama/', include('ama.urls')),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^admin/', admin.site.urls),
+    # url(r'^captcha/', include('captcha.urls')),
 ]
+
 
 if settings.DEBUG:
     import debug_toolbar

@@ -1,5 +1,21 @@
-*.pyc
-*.retry
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+/mig.bak/
+/static/
+/djangoproject.log
+
+# Database
 db.sqlite3
+
+# Ansible
+/ansible/*.retry
 /ansible/hosts
+
+/ansible/Makefile
+/ansible/dev_env.conf.j2
+/ansible/vars.yml
+test.py

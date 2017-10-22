@@ -2,13 +2,16 @@
 {% block js %}
 <script>
   function upvote(e, el) {
-    $.ajax({
-      url: el.href,
-      data: {comment_id: el.id},
-      success: function () {
-        console.log('updoot!')
-      },
-    })
+      $.ajax({
+          url: el.href,
+          data: {comment_id: el.id},
+          success: function () {
+              console.log('updoot!')
+              $(el).css('color', 'orange')
+              $(el).css('cursor', 'default')
+              $(el).unbind('click')
+          },
+      })
     return false
   }
 </script>
