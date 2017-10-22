@@ -1,0 +1,56 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "268613a18d84527c1762fdba2ed363814ccd7b8ea9dac724a48ab98ce6b9d13b"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "django": {
+            "version": "==1.11"
+        },
+        "django-adminplus": {
+            "version": "==0.5"
+        },
+        "django-bootstrap3": {
+            "version": "==8.2.2"
+        },
+        "django-debug-panel": {
+            "version": "==0.8.3"
+        },
+        "django-debug-toolbar": {
+            "version": "==1.7"
+        },
+        "django-debug-toolbar-template-timings": {
+            "version": "==0.7"
+        },
+        "django-mptt": {
+            "version": "==0.8.7"
+        },
+        "django-ratelimit": {
+            "version": "==1.0.1"
+        },
+        "djangorestframework": {
+            "version": "==3.6.2"
+        },
+        "gunicorn": {
+            "version": "==19.7.1"
+        },
+        "markdown2": {
+            "version": "==2.3.4"
+        },
+        "pytz": {
+            "version": "==2017.2"
+        },
+        "sqlparse": {
+            "version": "==0.2.3"
+        }
+    },
+    "develop": {}
+}
